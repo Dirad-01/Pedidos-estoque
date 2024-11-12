@@ -30,8 +30,17 @@ document.addEventListener('DOMContentLoaded', () => {
     // Inicializa a busca de materiais
     fetchMaterials();
 
+    // Função para normalizar a string removendo acentos e pontuação
+    function normalizeString(str) {
+        return str
+            .normalize('NFD') // Normaliza para decompor os caracteres com acentos
+            .replace(/[\u0300-\u036f]/g, '') // Remove os acentos
+            .replace(/[^\w\s]/gi, '') // Remove pontuação
+            .toLowerCase(); // Transforma em minúsculas
+    }
+
     searchBar.addEventListener('input', function() {
-        const query = searchBar.value.toLowerCase();
+        const query = normalizeString(searchBar.value);
         resultList.innerHTML = '';
 
         if (query.trim() === '') {
@@ -39,7 +48,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         materials.forEach(material => {
-            if (material.toLowerCase().includes(query)) {
+            const normalizedMaterial = normalizeString(material);
+
+            if (normalizedMaterial.includes(query)) {
                 const li = document.createElement('li');
                 li.className = 'result-item';
                 li.innerHTML = `
