@@ -18,6 +18,27 @@
             text-transform: uppercase; /* Transforma o texto para maiúsculas */
             font-weight: bold; /* Texto em negrito */
         }
+
+        /* Botão de rolar para o topo */
+        #scrollTopBtn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #7a551c;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            padding: 10px;
+            cursor: pointer;
+            font-size: 20px;
+            display: none; /* Inicialmente invisível */
+            transition: background-color 0.3s;
+        }
+
+        #scrollTopBtn:hover {
+            background-color: #b68e56;
+        }
+
     </style>
 </head>
 <body>
@@ -41,6 +62,29 @@
     <footer>
         © 2024 Dirad. Todos os direitos reservados.
     </footer>
+
+    <!-- Botão de rolar para o topo -->
+    <button id="scrollTopBtn" title="Voltar ao topo">↑</button>
+
     <script src="script.js"></script>
+    <script>
+        // Obtém o botão
+        let mybutton = document.getElementById("scrollTopBtn");
+
+        // Quando o usuário rolar para baixo 20px a partir do topo do documento, exibe o botão
+        window.onscroll = function() {
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                mybutton.style.display = "block";
+            } else {
+                mybutton.style.display = "none";
+            }
+        };
+
+        // Quando o usuário clicar no botão, rola para o topo da página
+        mybutton.onclick = function() {
+            document.body.scrollTop = 0; // Para Safari
+            document.documentElement.scrollTop = 0; // Para Chrome, Firefox, IE e Opera
+        };
+    </script>
 </body>
 </html>
