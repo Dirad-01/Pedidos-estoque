@@ -53,13 +53,16 @@ document.addEventListener('DOMContentLoaded', () => {
             if (normalizedMaterial.includes(query)) {
                 const li = document.createElement('li');
                 li.className = 'result-item';
+
+                // Estrutura HTML ajustada para alinhar os elementos
                 li.innerHTML = `
-                    ${material}
-                    <input type="number" min="1" placeholder="Quantidade">
-                    <button>Adicionar</button>
+                    <span class="material-name">${material}</span> <!-- Nome do material com classe para alinhamento -->
+                    <input type="number" min="1" placeholder="Quantidade" class="quantity-input">
+                    <button class="add-button">Adicionar</button>
                 `;
-                li.querySelector('button').addEventListener('click', function() {
-                    const quantity = li.querySelector('input').value;
+
+                li.querySelector('.add-button').addEventListener('click', function() {
+                    const quantity = li.querySelector('.quantity-input').value;
                     if (quantity) {
                         const addedItem = document.createElement('li');
                         addedItem.className = 'added-item';
@@ -71,7 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             addedItem.remove();
                         });
                         addedList.appendChild(addedItem);
-                        li.querySelector('input').value = '';
+                        li.querySelector('.quantity-input').value = '';
                     }
                 });
                 resultList.appendChild(li);
