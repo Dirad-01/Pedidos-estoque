@@ -1,3 +1,4 @@
+/* Estilos globais e cores */
 body {
     font-family: Arial, sans-serif;
     background-color: #eee2b4;
@@ -6,6 +7,7 @@ body {
     padding: 0;
 }
 
+/* Container Principal */
 .container {
     max-width: 600px;
     margin: 50px auto;
@@ -14,62 +16,89 @@ body {
     border-radius: 8px;
     background-color: #ffffd5;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
+/* Efeito de "hover" na caixa principal */
+.container:hover {
+    transform: scale(1.02);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Barra de Pesquisa */
 .search-bar {
     width: 100%;
-    padding: 10px;
+    padding: 12px;
     margin-bottom: 20px;
     font-size: 16px;
     border: 1px solid #90682f;
     border-radius: 4px;
     box-sizing: border-box;
-    transition: border-color 0.3s;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .search-bar:focus {
     border-color: #7a551c;
     outline: none;
+    box-shadow: 0 0 5px rgba(122, 85, 28, 0.5); /* Efeito de foco */
 }
 
+/* Lista de Resultados */
 .result-list {
     list-style: none;
     padding: 0;
 }
 
 .result-item {
-    padding: 10px;
+    padding: 12px;
     border: 1px solid #9b7239;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    gap: 12px;
     border-radius: 4px;
     background-color: #c9a974;
     font-size: 14px;
-    transition: background-color 0.3s, transform 0.3s;
+    transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
-.result-item:hover {
-    background-color: #b68e56;
-    transform: scale(1.02);
+.result-item .material-name {
+    flex: 1;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.result-item .quantity-input {
+    width: 90px;
+    padding: 6px;
+    text-align: center;
+    border: 1px solid #90682f;
+    border-radius: 4px;
 }
 
 .result-item button {
-    padding: 5px 10px;
+    padding: 8px 12px;
     cursor: pointer;
     background-color: #90682f;
     color: #fff;
     border: none;
     border-radius: 4px;
     font-size: 14px;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.result-item:hover {
+    background-color: #b68e56;
+    transform: scale(1.05);
 }
 
 .result-item button:hover {
     background-color: #b68e56;
+    transform: scale(1.1);
 }
 
+/* Lista de Itens Adicionados */
 .added-list {
     margin-top: 20px;
     padding: 0;
@@ -77,16 +106,16 @@ body {
 }
 
 .added-item {
-    padding: 10px;
+    padding: 12px;
     border: 1px solid #a67c42;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
     border-radius: 4px;
     background-color: #f4e3b2;
     font-size: 14px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    transition: background-color 0.3s, transform 0.3s;
+    transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 .added-item:hover {
@@ -99,31 +128,34 @@ body {
     color: #fff;
     border: none;
     border-radius: 4px;
-    padding: 5px 10px;
+    padding: 6px 12px;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s ease;
 }
 
 .added-item .delete-button:hover {
     background-color: #ff4c4c;
 }
 
+/* Botões */
 .generate-button, .copy-button {
-    margin-top: 10px;
-    padding: 10px;
+    margin-top: 15px;
+    padding: 12px;
     font-size: 16px;
     border: none;
     border-radius: 4px;
     background-color: #7a551c;
     color: #fff;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s ease;
+    width: 100%;
 }
 
 .generate-button:hover, .copy-button:hover {
     background-color: #b68e56;
 }
 
+/* Estilos de Rodapé */
 footer {
     position: fixed;
     bottom: 0;
@@ -131,11 +163,12 @@ footer {
     background-color: #7a551c;
     color: #fff;
     text-align: center;
-    padding: 10px;
+    padding: 12px;
     font-size: 12px;
     box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
 }
 
+/* Estilos para a Modal */
 .modal {
     display: none;
     position: fixed;
@@ -146,19 +179,19 @@ footer {
     height: 100%;
     overflow: auto;
     background-color: rgba(0, 0, 0, 0.4);
-    animation: fadeIn 0.3s;
+    animation: fadeIn 0.3s ease;
 }
 
 .modal-content {
-    background-color: #fff; /* Cor de fundo do modal */
+    background-color: #fff;
     margin: 5% auto;
     padding: 20px;
-    border: 1px solid #855e26; /* Marrom para combinar com o site */
+    border: 1px solid #855e26;
     width: 80%;
     max-width: 700px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    animation: slideIn 0.3s;
+    animation: slideIn 0.3s ease;
 }
 
 table {
@@ -168,25 +201,26 @@ table {
 }
 
 th, td {
-    border: 1px solid #855e26; /* Marrom para combinar com o site */
-    padding: 10px;
+    border: 1px solid #855e26;
+    padding: 12px;
     text-align: left;
     font-size: 14px;
 }
 
 th {
-    background-color: #d8b07f; /* Marrom claro para o cabeçalho */
-    color: #7a551c; /* Cor do texto para combinar com o esquema de cores do site */
+    background-color: #d8b07f;
+    color: #7a551c;
 }
 
 tr:nth-child(even) {
-    background-color: #f4e3b2; /* Cor de fundo mais clara para linhas pares */
+    background-color: #f4e3b2;
 }
 
 tr:hover {
-    background-color: #e0d1a2; /* Cor de fundo ao passar o mouse */
+    background-color: #e0d1a2;
 }
 
+/* Animações */
 @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
@@ -210,4 +244,35 @@ tr:hover {
     color: black;
     text-decoration: none;
     cursor: pointer;
+}
+
+/* Botão de rolar para o topo */
+#scrollTopBtn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background-color: #7a551c;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    padding: 15px;
+    font-size: 24px;
+    cursor: pointer;
+    display: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+}
+
+#scrollTopBtn:hover {
+    background-color: #b68e56;
+    transform: scale(1.1);
+}
+
+#scrollTopBtn:focus {
+    outline: none;
+}
+
+#scrollTopBtn:active {
+    transform: scale(0.95);
 }
