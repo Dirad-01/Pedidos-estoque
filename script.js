@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 return response.json();
             })
             .then(data => {
-                materials = data; // Supõe que 'data' é um array de materiais
+                materials = data;
             })
             .catch(error => {
                 console.error('There was a problem with the fetch operation:', error);
@@ -39,53 +39,57 @@ document.addEventListener('DOMContentLoaded', () => {
             .toLowerCase(); // Transforma em minúsculas
     }
 
+    let debounceTimer;
     searchBar.addEventListener('input', function() {
+        clearTimeout(debounceTimer);
         const query = normalizeString(searchBar.value);
-        resultList.innerHTML = '';
+        debounceTimer = setTimeout(() => {
+            resultList.innerHTML = '';
+            if (query.trim() === '') return;
 
-        if (query.trim() === '') {
-            return;
-        }
+            materials.forEach(material => {
+                const normalizedMaterial = normalizeString(material);
 
-        materials.forEach(material => {
-            const normalizedMaterial = normalizeString(material);
-
-            if (normalizedMaterial.includes(query)) {
-                const li = document.createElement('li');
-                li.className = 'result-item';
-
-                // Estrutura HTML ajustada para alinhar os elementos
-                li.innerHTML = `
-                    <span class="material-name">${material}</span> <!-- Nome do material com classe para alinhamento -->
-                    <input type="number" min="1" placeholder="Quantidade" class="quantity-input">
-                    <button class="add-button">Adicionar</button>
-                `;
-
-                li.querySelector('.add-button').addEventListener('click', function() {
-                    const quantity = li.querySelector('.quantity-input').value;
-                    if (quantity) {
-                        const addedItem = document.createElement('li');
-                        addedItem.className = 'added-item';
-                        addedItem.innerHTML = `
-                            ${quantity} ${material}
-                            <button class="delete-button">Excluir</button>
-                        `;
-                        addedItem.querySelector('.delete-button').addEventListener('click', function() {
-                            addedItem.remove();
-                        });
-                        addedList.appendChild(addedItem);
-                        li.querySelector('.quantity-input').value = '';
-                    }
-                });
-                resultList.appendChild(li);
-            }
-        });
+                if (normalizedMaterial.includes(query)) {
+                    const li = document.createElement('li');
+                    li.className = 'result-item';
+                    li.innerHTML = `
+                        <span class="material-name">${material}</span>
+                        <input type="number" min="1" placeholder="Quantidade" class="quantity-input">
+                        <button class="add-button">Adicionar</button>
+                    `;
+                    li.querySelector('.add-button').addEventListener('click', function() {
+                        const quantity = li.querySelector('.quantity-input').value;
+                        if (quantity && quantity > 0) {
+                            const addedItem = document.createElement('li');
+                            addedItem.className = 'added-item';
+                            addedItem.innerHTML = `
+                                ${quantity} ${material}
+                                <button class="delete-button">Excluir</button>
+                            `;
+                            addedItem.querySelector('.delete-button').addEventListener('click', function() {
+                                addedItem.remove();
+                            });
+                            addedList.appendChild(addedItem);
+                            li.querySelector('.quantity-input').value = '';
+                        } else {
+                            alert("Por favor, insira uma quantidade válida.");
+                        }
+                    });
+                    resultList.appendChild(li);
+                }
+            });
+        }, 300); // 300ms de delay para busca
     });
 
     generateDataButton.addEventListener('click', function() {
         const addedItems = document.querySelectorAll('#addedList .added-item');
-        let html = '<table><tr><th>Quantidade</th><th>Material</th></tr>';
+        if (addedItems.length === 0) {
+            alert("Adicione pelo menos um item para gerar os dados.");
+            return;
+        }
 
+        let html = '<table><tr><th>Quantidade</th><th>Material</th></tr>';
         addedItems.forEach(item => {
             const textContent = item.textContent.trim();
             const spaceIndex = textContent.indexOf(' ');
@@ -94,7 +98,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             html += `<tr><td>${quantity}</td><td>${material}</td></tr>`;
         });
-
         html += '</table>';
         dataContainer.innerHTML = html;
         dataModal.style.display = 'block';
@@ -107,7 +110,6 @@ document.addEventListener('DOMContentLoaded', () => {
     copyButton.addEventListener('click', function() {
         const addedItems = document.querySelectorAll('#addedList .added-item');
         let text = '';
-
         addedItems.forEach(item => {
             const textContent = item.textContent.trim();
             const spaceIndex = textContent.indexOf(' ');
