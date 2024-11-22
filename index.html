@@ -39,9 +39,42 @@
             background-color: #b68e56;
         }
 
+        /* Removido o efeito de foco de ampliação */
+        .search-bar:focus {
+            border-color: #7a551c;
+            outline: none;
+            box-shadow: none; /* Sem efeito de sombra */
+        }
+
+        /* Efeito de neve */
+        .snowflake {
+            position: fixed;
+            top: -10px;
+            z-index: 1000;
+            color: white;
+            font-size: 1em;
+            animation: snow linear infinite;
+        }
+
+        @keyframes snow {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1; /* Totalmente visível no início */
+            }
+            90% {
+                opacity: 1; /* Permanece visível até perto do fim */
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg); /* Alcança o fim da página */
+                opacity: 0; /* Gradualmente desaparece */
+            }
+        }
     </style>
 </head>
 <body>
+    <!-- Fundo de neve -->
+    <div id="snowContainer"></div>
+
     <div class="container">
         <h1>Pedidos de Materiais</h1> <!-- Título adicionado -->
         <input type="text" id="searchBar" class="search-bar" placeholder="Buscar materiais...">
@@ -85,6 +118,41 @@
             document.body.scrollTop = 0; // Para Safari
             document.documentElement.scrollTop = 0; // Para Chrome, Firefox, IE e Opera
         };
+
+        // Adiciona flocos de neve e estrelas
+        function createSnowflakes() {
+            const snowContainer = document.getElementById('snowContainer');
+            if (!snowContainer) return;
+
+            for (let i = 0; i < 7; i++) { // Mantém 7 símbolos por ciclo
+                const snowflake = document.createElement('div');
+                snowflake.className = 'snowflake';
+
+                // Alterna entre floco de neve e estrela
+                snowflake.textContent = Math.random() > 0.5 ? '❄' : '❆'; 
+
+                snowflake.style.left = `${Math.random() * 100}vw`;
+                snowflake.style.fontSize = `${Math.random() * 12 + 12}px`;
+                snowflake.style.animationDuration = `${Math.random() * 10 + 7}s`;
+                snowflake.style.opacity = Math.random();
+                snowContainer.appendChild(snowflake);
+
+                // Remove os símbolos depois de sua animação
+                snowflake.addEventListener('animationend', () => {
+                    snowflake.remove();
+                });
+            }
+        }
+
+        // Corrigido: Limpa os símbolos antigos antes de criar novos
+        function refreshSnowflakes() {
+            const snowContainer = document.getElementById('snowContainer');
+            if (snowContainer) snowContainer.innerHTML = ''; // Limpa símbolos antigos
+            createSnowflakes();
+        }
+
+        // Cria símbolos em intervalos
+        setInterval(refreshSnowflakes, 9000); // Intervalo para criar novos flocos e estrelas
     </script>
 </body>
 </html>
