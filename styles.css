@@ -1,8 +1,9 @@
-/* Estilos globais e cores */
+/* === Tema Natalino Elegante: Vermelho Suave + Dourado === */
+
 body {
     font-family: Arial, sans-serif;
-    background-color: #eee2b4;
-    color: #7a551c;
+    background: rgba(255, 248, 240, 0.93);
+    color: #5a3210;
     margin: 0;
     padding: 0;
 }
@@ -10,19 +11,19 @@ body {
 /* Container Principal */
 .container {
     max-width: 600px;
-    margin: 50px auto;
-    padding: 20px;
-    border: 1px solid #855e26;
-    border-radius: 8px;
-    background-color: #ffffd5;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 60px auto;
+    padding: 25px;
+    border: 1px solid rgba(255, 230, 180, 0.6);
+    border-radius: 12px;
+    background-color: rgba(255, 248, 240, 0.93);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(5px);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Efeito de "hover" na caixa principal */
 .container:hover {
-    transform: scale(1.02);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    transform: scale(1.01);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.4);
 }
 
 /* Barra de Pesquisa */
@@ -31,16 +32,17 @@ body {
     padding: 12px;
     margin-bottom: 20px;
     font-size: 16px;
-    border: 1px solid #90682f;
-    border-radius: 4px;
-    box-sizing: border-box;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid #a21b1b;
+    border-radius: 6px;
+    background-color: #fffaf0;
+    box-shadow: 0 0 5px rgba(162, 27, 27, 0.3);
+    transition: box-shadow 0.3s ease, transform 0.2s ease;
 }
 
 .search-bar:focus {
-    border-color: #7a551c;
     outline: none;
-    box-shadow: 0 0 5px rgba(122, 85, 28, 0.5); /* Efeito de foco */
+    box-shadow: 0 0 8px rgba(255, 217, 122, 0.7);
+    transform: scale(1.02);
 }
 
 /* Lista de Resultados */
@@ -51,51 +53,49 @@ body {
 
 .result-item {
     padding: 12px;
-    border: 1px solid #9b7239;
+    border: 1px solid rgba(255, 215, 109, 0.7);
     margin-bottom: 12px;
     display: flex;
     align-items: center;
     gap: 12px;
-    border-radius: 4px;
-    background-color: #c9a974;
+    border-radius: 8px;
+    background-color: rgba(255, 240, 220, 0.9);
     font-size: 14px;
     transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
+.result-item:hover {
+    background-color: rgba(255, 230, 200, 0.95);
+    transform: scale(1.03);
+}
+
 .result-item .material-name {
     flex: 1;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
 }
 
 .result-item .quantity-input {
     width: 90px;
     padding: 6px;
     text-align: center;
-    border: 1px solid #90682f;
-    border-radius: 4px;
+    border: 1px solid #a21b1b;
+    border-radius: 6px;
 }
 
+/* Botão Adicionar */
 .result-item button {
     padding: 8px 12px;
     cursor: pointer;
-    background-color: #90682f;
+    background-color: #a21b1b;
     color: #fff;
     border: none;
-    border-radius: 4px;
-    font-size: 14px;
-    transition: background-color 0.3s ease, transform 0.3s ease;
-}
-
-.result-item:hover {
-    background-color: #b68e56;
-    transform: scale(1.05);
+    border-radius: 6px;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .result-item button:hover {
-    background-color: #b68e56;
-    transform: scale(1.1);
+    background-color: #d43b3b;
+    transform: scale(1.05);
 }
 
 /* Lista de Itens Adicionados */
@@ -107,11 +107,10 @@ body {
 
 .added-item {
     padding: 12px;
-    border: 1px solid #a67c42;
+    border: 1px solid rgba(255, 215, 109, 0.7);
     margin-bottom: 12px;
-    border-radius: 4px;
-    background-color: #f4e3b2;
-    font-size: 14px;
+    border-radius: 8px;
+    background-color: rgba(255, 240, 220, 0.9);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -119,15 +118,16 @@ body {
 }
 
 .added-item:hover {
-    background-color: #e0d1a2;
+    background-color: rgba(255, 230, 200, 0.95);
     transform: scale(1.02);
 }
 
+/* Botão Excluir */
 .added-item .delete-button {
     background-color: #ff6b6b;
     color: #fff;
     border: none;
-    border-radius: 4px;
+    border-radius: 6px;
     padding: 6px 12px;
     cursor: pointer;
     transition: background-color 0.3s ease;
@@ -137,38 +137,26 @@ body {
     background-color: #ff4c4c;
 }
 
-/* Botões */
+/* Botões Gerar e Copiar */
 .generate-button, .copy-button {
     margin-top: 15px;
     padding: 12px;
     font-size: 16px;
     border: none;
-    border-radius: 4px;
-    background-color: #7a551c;
+    border-radius: 8px;
+    background-color: #a21b1b;
     color: #fff;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, transform 0.2s ease;
     width: 100%;
 }
 
 .generate-button:hover, .copy-button:hover {
-    background-color: #b68e56;
+    background-color: #d43b3b;
+    transform: scale(1.02);
 }
 
-/* Estilos de Rodapé */
-footer {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    background-color: #7a551c;
-    color: #fff;
-    text-align: center;
-    padding: 12px;
-    font-size: 12px;
-    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
-}
-
-/* Estilos para a Modal */
+/* Modal */
 .modal {
     display: none;
     position: fixed;
@@ -178,22 +166,32 @@ footer {
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgba(0, 0, 0, 0.4);
-    animation: fadeIn 0.3s ease;
+    background-color: rgba(0, 0, 0, 0.6);
 }
 
 .modal-content {
-    background-color: #fff;
+    background-color: rgba(255, 248, 240, 0.98);
     margin: 5% auto;
     padding: 20px;
-    border: 1px solid #855e26;
+    border: 2px solid rgba(255, 215, 109, 0.8);
     width: 80%;
     max-width: 700px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    animation: slideIn 0.3s ease;
+    border-radius: 12px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
 }
 
+.close-button {
+    float: right;
+    font-size: 24px;
+    color: #a21b1b;
+    cursor: pointer;
+}
+
+.close-button:hover {
+    color: #d43b3b;
+}
+
+/* Tabela */
 table {
     width: 100%;
     border-collapse: collapse;
@@ -201,78 +199,20 @@ table {
 }
 
 th, td {
-    border: 1px solid #855e26;
+    border: 1px solid rgba(255, 215, 109, 0.7);
     padding: 12px;
     text-align: left;
-    font-size: 14px;
 }
 
 th {
-    background-color: #d8b07f;
-    color: #7a551c;
+    background-color: #ffd97a;
+    color: #5a3210;
 }
 
 tr:nth-child(even) {
-    background-color: #f4e3b2;
+    background-color: rgba(255, 248, 240, 0.8);
 }
 
 tr:hover {
-    background-color: #e0d1a2;
-}
-
-/* Animações */
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-@keyframes slideIn {
-    from { transform: translateY(-50px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
-}
-
-.close-button {
-    color: #aaa;
-    float: right;
-    font-size: 24px;
-    font-weight: bold;
-    transition: color 0.3s;
-}
-
-.close-button:hover,
-.close-button:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
-}
-
-/* Botão de rolar para o topo */
-#scrollTopBtn {
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    background-color: #7a551c;
-    color: white;
-    border: none;
-    border-radius: 50%;
-    padding: 15px;
-    font-size: 24px;
-    cursor: pointer;
-    display: none;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    z-index: 1000;
-}
-
-#scrollTopBtn:hover {
-    background-color: #b68e56;
-    transform: scale(1.1);
-}
-
-#scrollTopBtn:focus {
-    outline: none;
-}
-
-#scrollTopBtn:active {
-    transform: scale(0.95);
+    background-color: rgba(255, 240, 220, 0.9);
 }
