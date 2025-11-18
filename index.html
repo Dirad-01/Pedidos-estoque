@@ -13,7 +13,7 @@
       font-family: Arial, sans-serif;
       color: #5a3210;
 
-      /* Fundo: tom avermelhado suave com luzes douradas (bokeh) */
+      /* Fundo natalino */
       background:
         linear-gradient(rgba(60, 0, 0, 0.45), rgba(60, 0, 0, 0.45)),
         url("https://images.unsplash.com/photo-1543589077-47e9a3a2c3c2?q=80&w=1920&auto=format&fit=crop&ixlib=rb-4.0.3&s=6bcb9ee2c07cbb66e6c8e91c81a9baf8");
@@ -112,7 +112,7 @@
       transform: scale(1.1);
     }
 
-    /* ❄️ Flocos de neve menores e mais delicados */
+    /* ❄️ Flocos de neve */
     .snowflake {
       position: fixed;
       top: -10px;
@@ -129,23 +129,11 @@
       0% { transform: translateY(0) rotate(0deg); opacity: 1; }
       100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
     }
-
-    /* Luz dourada leve nas bordas da tela */
-    body::before, body::after {
-      content: "";
-      position: fixed;
-      top: 0;
-      width: 50px;
-      height: 100%;
-      background: radial-gradient(circle, rgba(255, 220, 150, 0.25), transparent 70%);
-      pointer-events: none;
-      z-index: 5;
-    }
-    body::after { right: 0; left: auto; }
   </style>
 </head>
 
 <body>
+
   <div id="snowContainer"></div>
 
   <div class="container">
@@ -166,44 +154,56 @@
     </div>
   </div>
 
-  <footer>🎄 Dirad © 2024–2025🎁</footer>
+  <footer>🎄 Dirad © 2024–2025 🎁</footer>
 
   <button id="scrollTopBtn" title="Voltar ao topo">👆</button>
 
   <script src="script.js"></script>
+
+  <!-- ===== ❄️ NEVE OTIMIZADA ===== -->
   <script>
-    // Botão "voltar ao topo"
+    const snowContainer = document.getElementById("snowContainer");
+    const MAX_FLAKES = 40;
+    const FLAKE_INTERVAL = 900;
+    let currentFlakes = 0;
+
+    function createSnowflake() {
+      if (currentFlakes >= MAX_FLAKES) return;
+
+      const flake = document.createElement("div");
+      flake.className = "snowflake";
+
+      const symbols = ["❅", "❆", "❄"];
+      flake.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+
+      flake.style.left = `${Math.random() * 100}vw`;
+      flake.style.fontSize = `${Math.random() * 8 + 6}px`;
+      flake.style.animationDuration = `${Math.random() * 6 + 5}s`;
+      flake.style.opacity = Math.random() * 0.6 + 0.3;
+
+      currentFlakes++;
+      snowContainer.appendChild(flake);
+
+      flake.addEventListener("animationend", () => {
+        flake.remove();
+        currentFlakes--;
+      });
+    }
+
+    setInterval(createSnowflake, FLAKE_INTERVAL);
+
+    // Botão voltar ao topo
     const mybutton = document.getElementById("scrollTopBtn");
     window.onscroll = function () {
-      if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20)
-        mybutton.style.display = "block";
-      else mybutton.style.display = "none";
+      mybutton.style.display =
+        (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20)
+        ? "block" : "none";
     };
     mybutton.onclick = () => {
       document.body.scrollTop = 0;
       document.documentElement.scrollTop = 0;
     };
-
-    // ❄️ Neve mais suave e menor
-    function createSnowflake() {
-      const snowContainer = document.getElementById("snowContainer");
-      const snowflake = document.createElement("div");
-      snowflake.className = "snowflake";
-
-      const symbols = ["️", "❅", "❆"];
-      snowflake.textContent = symbols[Math.floor(Math.random() * symbols.length)];
-
-      snowflake.style.left = `${Math.random() * 100}vw`;
-      snowflake.style.fontSize = `${Math.random() * 10 + 8}px`;
-      snowflake.style.animationDuration = `${Math.random() * 10 + 6}s`;
-      snowflake.style.opacity = Math.random() * 0.6 + 0.3;
-
-      snowContainer.appendChild(snowflake);
-      snowflake.addEventListener("animationend", () => snowflake.remove());
-    }
-
-    // Menos flocos e mais suaves
-    setInterval(createSnowflake, 600);
   </script>
+
 </body>
 </html>
