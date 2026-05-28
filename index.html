@@ -1,159 +1,176 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pedidos Estoque</title>
-    <link rel="stylesheet" href="styles.css">
-    <style>
-        h1 {
-            text-align: center; /* Centraliza o texto */
-            margin-bottom: 20px; /* Espaço abaixo do título */
-            font-size: 2em; /* Tamanho da fonte ajustado */
-            color: #7a551c; /* Cor do texto */
-            background-color: #ffffd5; /* Cor de fundo do título */
-            padding: 10px; /* Espaçamento interno */
-            border-radius: 8px; /* Bordas arredondadas */
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Sombra para o título */
-            text-transform: uppercase; /* Transforma o texto para maiúsculas */
-            font-weight: bold; /* Texto em negrito */
-        }
 
-        /* Botão de rolar para o topo */
-        #scrollTopBtn {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background-color: #7a551c;
-            color: white;
-            border: none;
-            border-radius: 50%;
-            padding: 10px;
-            cursor: pointer;
-            font-size: 20px;
-            display: none; /* Inicialmente invisível */
-            transition: background-color 0.3s;
-        }
+    <meta charset="UTF-8" />
 
-        #scrollTopBtn:hover {
-            background-color: #b68e56;
-        }
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-        /* Removido o efeito de foco de ampliação */
-        .search-bar:focus {
-            border-color: #7a551c;
-            outline: none;
-            box-shadow: none; /* Sem efeito de sombra */
-        }
+    <title>Pedidos de Materiais</title>
 
-        /* Efeito de neve */
-        .snowflake {
-            position: fixed;
-            top: -10px;
-            z-index: 1000;
-            color: white;
-            font-size: 1em;
-            animation: snow linear infinite;
-        }
+    <link rel="stylesheet" href="styles.css" />
 
-        @keyframes snow {
-            0% {
-                transform: translateY(0) rotate(0deg);
-                opacity: 1; /* Totalmente visível no início */
-            }
-            90% {
-                opacity: 1; /* Permanece visível até perto do fim */
-            }
-            100% {
-                transform: translateY(100vh) rotate(360deg); /* Alcança o fim da página */
-                opacity: 0; /* Gradualmente desaparece */
-            }
-        }
-    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
 </head>
-<body>
-    <!-- Fundo de neve -->
-    <div id="snowContainer"></div>
 
-    <div class="container">
-        <h1>Pedidos de Materiais</h1> <!-- Título adicionado -->
-        <input type="text" id="searchBar" class="search-bar" placeholder="Buscar materiais...">
-        <ul id="resultList" class="result-list"></ul>
-        <h3>Materiais Adicionados:</h3>
-        <ul id="addedList" class="added-list"></ul>
-        <button id="generateData" class="generate-button">Gerar Dados</button>
-    </div>
-    <!-- Modal -->
-    <div id="dataModal" class="modal">
-        <div class="modal-content">
-            <span class="close-button" id="closeModal">&times;</span>
-            <h2>Dados dos Pedidos</h2>
-            <div id="dataContainer"></div>
-            <button id="copyButton" class="copy-button">Copiar Dados</button>
+<body>
+
+    <!-- TOAST -->
+
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- CONTAINER -->
+
+    <main class="container">
+
+        <!-- HEADER -->
+
+        <div class="top-bar">
+
+            <div>
+
+                <h1>Pedidos de Materiais</h1>
+
+                <p class="subtitle">
+                    Busque materiais, adicione quantidades e gere os dados rapidamente.
+                </p>
+
+            </div>
+
+            <div class="stats">
+
+                <div class="stat-card">
+
+                    <span>Total Itens</span>
+
+                    <strong id="itemCounter">0</strong>
+
+                </div>
+
+                <div class="stat-card">
+
+                    <span>Última Geração</span>
+
+                    <strong id="lastGenerated">--:--</strong>
+
+                </div>
+
+            </div>
+
         </div>
+
+        <!-- SEARCH -->
+
+        <div class="search-wrapper">
+
+            <input type="text" id="searchBar" class="search-bar"
+                placeholder="Buscar materiais..." autocomplete="off" />
+
+            <div class="search-info">
+
+                <span id="resultsCount">0 resultados</span>
+
+            </div>
+
+        </div>
+
+        <!-- RESULTADOS -->
+
+        <div id="loading" class="loading">
+
+            <div class="loader"></div>
+
+            <span>Carregando materiais...</span>
+
+        </div>
+
+        <ul id="resultList" class="result-list"></ul>
+
+        <!-- SECTION -->
+
+        <div class="section-header">
+
+            <h2>Materiais Adicionados</h2>
+
+            <button id="clearList" class="clear-button">
+
+                Limpar Lista
+
+            </button>
+
+        </div>
+
+        <ul id="addedList" class="added-list"></ul>
+
+        <!-- ACTIONS -->
+
+        <div class="actions">
+
+            <button id="generateData" class="generate-button">
+
+                Gerar Dados
+
+            </button>
+
+        </div>
+
+    </main>
+
+    <!-- MODAL -->
+
+    <div id="dataModal" class="modal">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <h2>Dados dos Pedidos</h2>
+
+                <button id="closeModal" class="close-button">
+
+                    ✕
+
+                </button>
+
+            </div>
+
+            <div id="dataContainer"></div>
+
+            <button id="copyButton" class="copy-button">
+
+                Copiar Dados
+
+            </button>
+
+        </div>
+
     </div>
+
+    <!-- FOOTER -->
+
     <footer>
-        © 2024–2025 Victor Duarte. Todos os direitos reservados.
+
+        © 2024–2026 Victor Duarte. Todos os direitos reservados.
+
     </footer>
 
-    <!-- Botão de rolar para o topo -->
-    <button id="scrollTopBtn" title="Voltar ao topo">👆</button>
+    <!-- SCROLL -->
+
+    <button id="scrollTopBtn" title="Voltar ao topo">
+
+        ↑
+
+    </button>
 
     <script src="script.js"></script>
-    <script>
-        // Obtém o botão
-        let mybutton = document.getElementById("scrollTopBtn");
 
-        // Quando o usuário rolar para baixo 20px a partir do topo do documento, exibe o botão
-        window.onscroll = function() {
-            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-                mybutton.style.display = "block";
-            } else {
-                mybutton.style.display = "none";
-            }
-        };
-
-        // Quando o usuário clicar no botão, rola para o topo da página
-        mybutton.onclick = function() {
-            document.body.scrollTop = 0; // Para Safari
-            document.documentElement.scrollTop = 0; // Para Chrome, Firefox, IE e Opera
-        };
-
-        // Adiciona flocos de neve e estrelas
-        function createSnowflakes() {
-            const snowContainer = document.getElementById('snowContainer');
-            if (!snowContainer) return;
-
-            for (let i = 0; i < 7; i++) { // Mantém 7 símbolos por ciclo
-                const snowflake = document.createElement('div');
-                snowflake.className = 'snowflake';
-
-                // Alterna entre floco de neve e estrela
-                snowflake.textContent = Math.random() > 0.5 ? '' : ''; 
-
-                snowflake.style.left = `${Math.random() * 100}vw`;
-                snowflake.style.fontSize = `${Math.random() * 12 + 12}px`;
-                snowflake.style.animationDuration = `${Math.random() * 10 + 7}s`;
-                snowflake.style.opacity = Math.random();
-                snowContainer.appendChild(snowflake);
-
-                // Remove os símbolos depois de sua animação
-                snowflake.addEventListener('animationend', () => {
-                    snowflake.remove();
-                });
-            }
-        }
-
-        // Corrigido: Limpa os símbolos antigos antes de criar novos
-        function refreshSnowflakes() {
-            const snowContainer = document.getElementById('snowContainer');
-            if (snowContainer) snowContainer.innerHTML = ''; // Limpa símbolos antigos
-            createSnowflakes();
-        }
-
-        // Cria símbolos em intervalos
-        setInterval(refreshSnowflakes, 9000); // Intervalo para criar novos flocos e estrelas
-    </script>
 </body>
-</html>
 
+</html>
