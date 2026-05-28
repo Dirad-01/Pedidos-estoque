@@ -1,133 +1,429 @@
 document.addEventListener('DOMContentLoaded', () => {
+
     const searchBar = document.getElementById('searchBar');
+
     const resultList = document.getElementById('resultList');
+
     const addedList = document.getElementById('addedList');
-    const generateDataButton = document.getElementById('generateData');
-    const copyButton = document.getElementById('copyButton');
-    const dataModal = document.getElementById('dataModal');
-    const closeModal = document.getElementById('closeModal');
-    const dataContainer = document.getElementById('dataContainer');
+
+    const generateDataButton =
+        document.getElementById('generateData');
+
+    const copyButton =
+        document.getElementById('copyButton');
+
+    const dataModal =
+        document.getElementById('dataModal');
+
+    const closeModal =
+        document.getElementById('closeModal');
+
+    const dataContainer =
+        document.getElementById('dataContainer');
+
+    const itemCounter =
+        document.getElementById('itemCounter');
+
+    const resultsCount =
+        document.getElementById('resultsCount');
+
+    const clearListButton =
+        document.getElementById('clearList');
+
+    const loading =
+        document.getElementById('loading');
+
+    const lastGenerated =
+        document.getElementById('lastGenerated');
+
+    const toastContainer =
+        document.getElementById('toastContainer');
+
+    const scrollTopBtn =
+        document.getElementById('scrollTopBtn');
 
     let materials = [];
 
-    // Função para buscar o arquivo JSON do GitHub
-    function fetchMaterials() {
-        fetch('https://raw.githubusercontent.com/Dirad-01/Pedidos-estoque/main/materials.json')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                materials = data;
-            })
-            .catch(error => {
-                console.error('There was a problem with the fetch operation:', error);
-            });
+    let addedMaterials = [];
+
+    /* TOAST */
+
+    function showToast(message) {
+
+        const toast =
+            document.createElement('div');
+
+        toast.className = 'toast';
+
+        toast.textContent = message;
+
+        toastContainer.appendChild(toast);
+
+        setTimeout(() => {
+
+            toast.remove();
+
+        }, 3000);
     }
 
-    // Inicializa a busca de materiais
+    /* FETCH */
+
+    async function fetchMaterials() {
+
+        try {
+
+            const response = await fetch(
+                'https://raw.githubusercontent.com/Dirad-01/Pedidos-estoque/main/materials.json'
+            );
+
+            materials = await response.json();
+
+            loading.style.display = 'none';
+
+        } catch (error) {
+
+            loading.innerHTML =
+                'Erro ao carregar materiais.';
+        }
+    }
+
     fetchMaterials();
 
-    // Função para normalizar a string removendo acentos e pontuação
+    /* NORMALIZE */
+
     function normalizeString(str) {
+
         return str
-            .normalize('NFD') // Normaliza para decompor os caracteres com acentos
-            .replace(/[\u0300-\u036f]/g, '') // Remove os acentos
-            .replace(/[^\w\s]/gi, '') // Remove pontuação
-            .toLowerCase(); // Transforma em minúsculas
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .replace(/[^\w\s]/gi, '')
+            .toLowerCase();
     }
 
+    /* SAVE */
+
+    function saveLocal() {
+
+        localStorage.setItem(
+            'materials',
+            JSON.stringify(addedMaterials)
+        );
+    }
+
+    /* LOAD */
+
+    function loadLocal() {
+
+        const saved =
+            localStorage.getItem('materials');
+
+        if (saved) {
+
+            addedMaterials = JSON.parse(saved);
+
+            renderAddedItems();
+        }
+    }
+
+    /* COUNTER */
+
+    function updateCounter() {
+
+        itemCounter.textContent =
+            addedMaterials.length;
+    }
+
+    /* RENDER */
+
+    function renderAddedItems() {
+
+        addedList.innerHTML = '';
+
+        addedMaterials.forEach(item => {
+
+            const li =
+                document.createElement('li');
+
+            li.className = 'added-item';
+
+            li.innerHTML = `
+                <span>
+                    <strong>${item.quantity}x</strong>
+                    ${item.material}
+                </span>
+
+                <button class="delete-button">
+                    Excluir
+                </button>
+            `;
+
+            li.querySelector('.delete-button')
+                .addEventListener('click', () => {
+
+                    addedMaterials =
+                        addedMaterials.filter(
+                            i => i.material !== item.material
+                        );
+
+                    renderAddedItems();
+
+                    saveLocal();
+
+                    updateCounter();
+
+                    showToast('Item removido');
+                });
+
+            addedList.appendChild(li);
+        });
+
+        updateCounter();
+    }
+
+    loadLocal();
+
+    /* SEARCH */
+
     let debounceTimer;
-    searchBar.addEventListener('input', function() {
+
+    searchBar.addEventListener('input', () => {
+
         clearTimeout(debounceTimer);
-        const query = normalizeString(searchBar.value);
+
         debounceTimer = setTimeout(() => {
+
+            const query =
+                normalizeString(searchBar.value);
+
             resultList.innerHTML = '';
-            if (query.trim() === '') return;
 
-            materials.forEach(material => {
-                const normalizedMaterial = normalizeString(material);
+            if (!query.trim()) {
 
-                if (normalizedMaterial.includes(query)) {
-                    const li = document.createElement('li');
-                    li.className = 'result-item';
-                    li.innerHTML = `
-                        <span class="material-name">${material}</span>
-                        <input type="number" min="1" placeholder="Quantidade" class="quantity-input">
-                        <button class="add-button">Adicionar</button>
-                    `;
-                    li.querySelector('.add-button').addEventListener('click', function() {
-                        const quantity = li.querySelector('.quantity-input').value;
-                        if (quantity && quantity > 0) {
-                            const addedItem = document.createElement('li');
-                            addedItem.className = 'added-item';
-                            addedItem.innerHTML = `
-                                ${quantity} ${material}
-                                <button class="delete-button">Excluir</button>
-                            `;
-                            addedItem.querySelector('.delete-button').addEventListener('click', function() {
-                                addedItem.remove();
-                            });
-                            addedList.appendChild(addedItem);
-                            li.querySelector('.quantity-input').value = '';
-                        } else {
-                            alert("Por favor, insira uma quantidade válida.");
-                        }
-                    });
-                    resultList.appendChild(li);
+                resultsCount.textContent =
+                    '0 resultados';
+
+                return;
+            }
+
+            const filtered =
+                materials.filter(material =>
+                    normalizeString(material)
+                    .includes(query)
+                );
+
+            resultsCount.textContent =
+                `${filtered.length} resultados`;
+
+            if (!filtered.length) {
+
+                resultList.innerHTML = `
+                    <li class="result-item">
+                        Nenhum material encontrado.
+                    </li>
+                `;
+
+                return;
+            }
+
+            filtered.slice(0, 15).forEach(material => {
+
+                const li =
+                    document.createElement('li');
+
+                li.className = 'result-item';
+
+                li.innerHTML = `
+                    <span class="material-name">
+                        ${material}
+                    </span>
+
+                    <input
+                        type="number"
+                        min="1"
+                        placeholder="Qtd"
+                        class="quantity-input"
+                    >
+
+                    <button class="add-button">
+                        Adicionar
+                    </button>
+                `;
+
+                const input =
+                    li.querySelector('.quantity-input');
+
+                const addButton =
+                    li.querySelector('.add-button');
+
+                function addMaterial() {
+
+                    const quantity =
+                        parseInt(input.value);
+
+                    if (!quantity || quantity <= 0) {
+
+                        showToast(
+                            'Digite uma quantidade válida.'
+                        );
+
+                        return;
+                    }
+
+                    const existing =
+                        addedMaterials.find(
+                            item => item.material === material
+                        );
+
+                    if (existing) {
+
+                        existing.quantity += quantity;
+
+                    } else {
+
+                        addedMaterials.push({
+                            material,
+                            quantity
+                        });
+                    }
+
+                    renderAddedItems();
+
+                    saveLocal();
+
+                    updateCounter();
+
+                    input.value = '';
+
+                    showToast('Material adicionado');
                 }
+
+                addButton.addEventListener(
+                    'click',
+                    addMaterial
+                );
+
+                input.addEventListener(
+                    'keydown',
+                    e => {
+
+                        if (e.key === 'Enter') {
+
+                            addMaterial();
+                        }
+                    }
+                );
+
+                resultList.appendChild(li);
             });
-        }, 300); // 300ms de delay para busca
+
+        }, 250);
     });
 
-    generateDataButton.addEventListener('click', function() {
-        const addedItems = document.querySelectorAll('#addedList .added-item');
-        if (addedItems.length === 0) {
-            alert("Adicione pelo menos um item para gerar os dados.");
+    /* CLEAR */
+
+    clearListButton.addEventListener('click', () => {
+
+        addedMaterials = [];
+
+        renderAddedItems();
+
+        saveLocal();
+
+        showToast('Lista limpa');
+    });
+
+    /* GENERATE */
+
+    generateDataButton.addEventListener('click', () => {
+
+        if (!addedMaterials.length) {
+
+            showToast(
+                'Adicione pelo menos um item.'
+            );
+
             return;
         }
 
-        let html = '<table><tr><th>Quantidade</th><th>Material</th></tr>';
-        addedItems.forEach(item => {
-            const textContent = item.textContent.trim();
-            const spaceIndex = textContent.indexOf(' ');
-            const quantity = textContent.substring(0, spaceIndex);
-            const material = textContent.substring(spaceIndex + 1).replace('Excluir', '').trim();
+        let html = `
+            <table>
+                <tr>
+                    <th>Quantidade</th>
+                    <th>Material</th>
+                </tr>
+        `;
 
-            html += `<tr><td>${quantity}</td><td>${material}</td></tr>`;
+        addedMaterials.forEach(item => {
+
+            html += `
+                <tr>
+                    <td>${item.quantity}</td>
+                    <td>${item.material}</td>
+                </tr>
+            `;
         });
+
         html += '</table>';
+
         dataContainer.innerHTML = html;
+
         dataModal.style.display = 'block';
+
+        const now = new Date();
+
+        lastGenerated.textContent =
+            now.toLocaleTimeString('pt-BR', {
+                hour: '2-digit',
+                minute: '2-digit'
+            });
     });
 
-    closeModal.addEventListener('click', function() {
+    /* COPY */
+
+    copyButton.addEventListener('click', async () => {
+
+        let text = '';
+
+        addedMaterials.forEach(item => {
+
+            text += `${item.quantity}\t${item.material}\n`;
+        });
+
+        await navigator.clipboard.writeText(text);
+
+        showToast('Dados copiados');
+    });
+
+    /* MODAL */
+
+    closeModal.addEventListener('click', () => {
+
         dataModal.style.display = 'none';
     });
 
-    copyButton.addEventListener('click', function() {
-        const addedItems = document.querySelectorAll('#addedList .added-item');
-        let text = '';
-        addedItems.forEach(item => {
-            const textContent = item.textContent.trim();
-            const spaceIndex = textContent.indexOf(' ');
-            const quantity = textContent.substring(0, spaceIndex);
-            const material = textContent.substring(spaceIndex + 1).replace('Excluir', '').trim();
-            text += `${quantity}\t${material}\n`;
-        });
+    window.addEventListener('click', e => {
 
-        navigator.clipboard.writeText(text).then(() => {
-            alert('Dados copiados com sucesso!');
-        }).catch(err => {
-            console.error('Erro ao copiar os dados: ', err);
-        });
-    });
+        if (e.target === dataModal) {
 
-    window.addEventListener('click', function(event) {
-        if (event.target === dataModal) {
             dataModal.style.display = 'none';
         }
+    });
+
+    /* SCROLL */
+
+    window.addEventListener('scroll', () => {
+
+        scrollTopBtn.style.display =
+            window.scrollY > 200
+                ? 'block'
+                : 'none';
+    });
+
+    scrollTopBtn.addEventListener('click', () => {
+
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
     });
 });
