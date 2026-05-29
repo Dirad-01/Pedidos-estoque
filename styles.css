@@ -529,7 +529,9 @@ button {
     filter: brightness(1.03);
 }
 
-/* MODAL */
+/* =========================
+   MODAL AJUSTADO
+========================= */
 
 .modal {
 
@@ -539,29 +541,44 @@ button {
 
     inset: 0;
 
-    background:
-        rgba(0,0,0,.35);
+    background: rgba(0,0,0,.35);
 
     backdrop-filter: blur(4px);
 
-    z-index: 999;
+    z-index: 9999;
+
+    padding: 20px;
+
+    overflow: hidden;
+
+    align-items: center;
+
+    justify-content: center;
 }
 
 .modal-content {
 
-    width: 90%;
+    width: 100%;
     max-width: 820px;
-
-    margin: 60px auto;
 
     background: var(--card);
 
     border-radius: 24px;
 
-    padding: 30px;
+    padding: 24px;
 
     animation: fadeUp .3s ease;
+
+    display: flex;
+
+    flex-direction: column;
+
+    max-height: 90vh;
+
+    overflow: hidden;
 }
+
+/* HEADER */
 
 .modal-header {
 
@@ -571,7 +588,9 @@ button {
 
     align-items: center;
 
-    margin-bottom: 25px;
+    margin-bottom: 20px;
+
+    flex-shrink: 0;
 }
 
 .close-button {
@@ -589,7 +608,22 @@ button {
     font-size: 18px;
 }
 
-/* TABLE */
+/* ÁREA COM SCROLL */
+
+#dataContainer {
+
+    flex: 1;
+
+    overflow-y: auto;
+
+    overflow-x: auto;
+
+    min-height: 0;
+
+    border-radius: 18px;
+}
+
+/* TABELA */
 
 table {
 
@@ -606,8 +640,13 @@ table {
 
 th {
 
-    background:
-        rgba(122,85,28,.08);
+    position: sticky;
+
+    top: 0;
+
+    z-index: 2;
+
+    background: #f3ede1;
 
     color: var(--primary);
 
@@ -625,6 +664,35 @@ td {
     text-align: left;
 }
 
+/* BOTÃO FIXO */
+
+.copy-button {
+
+    margin-top: 18px;
+
+    flex-shrink: 0;
+}
+
+/* SCROLL BONITO */
+
+#dataContainer::-webkit-scrollbar {
+
+    width: 10px;
+    height: 10px;
+}
+
+#dataContainer::-webkit-scrollbar-thumb {
+
+    background: rgba(122,85,28,.30);
+
+    border-radius: 20px;
+}
+
+#dataContainer::-webkit-scrollbar-track {
+
+    background: rgba(122,85,28,.08);
+}
+
 /* TOAST */
 
 .toast-container {
@@ -634,7 +702,14 @@ td {
     top: 20px;
     right: 20px;
 
-    z-index: 9999;
+    z-index: 20000;
+
+    pointer-events: none;
+}
+
+.toast {
+
+    pointer-events: auto;
 }
 
 .toast {
