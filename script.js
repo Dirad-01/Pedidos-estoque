@@ -367,7 +367,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         dataContainer.innerHTML = html;
 
-        dataModal.style.display = 'block';
+        dataModal.style.display = 'flex';
+
+        /* BLOQUEIA O SCROLL DO FUNDO */
+
+        document.body.style.overflow = 'hidden';
 
         const now = new Date();
 
@@ -394,18 +398,38 @@ document.addEventListener('DOMContentLoaded', () => {
         showToast('Dados copiados');
     });
 
-    /* MODAL */
+    /* FECHAR MODAL */
+
+    function closeModalFunction() {
+
+        dataModal.style.display = 'none';
+
+        /* LIBERA O SCROLL DO FUNDO */
+
+        document.body.style.overflow = 'auto';
+    }
 
     closeModal.addEventListener('click', () => {
 
-        dataModal.style.display = 'none';
+        closeModalFunction();
     });
 
     window.addEventListener('click', e => {
 
         if (e.target === dataModal) {
 
-            dataModal.style.display = 'none';
+            closeModalFunction();
+        }
+    });
+
+    /* ESC FECHA MODAL */
+
+    document.addEventListener('keydown', e => {
+
+        if (e.key === 'Escape' &&
+            dataModal.style.display === 'flex') {
+
+            closeModalFunction();
         }
     });
 
