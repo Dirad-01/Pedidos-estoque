@@ -104,26 +104,42 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function saveLocal() {
 
-        localStorage.setItem(
-            'materials',
-            JSON.stringify(addedMaterials)
-        );
-    }
+    localStorage.setItem(
+        'materials',
+        JSON.stringify({
+            date: new Date().toLocaleDateString('pt-BR'),
+            data: addedMaterials
+        })
+    );
+}
 
     /* LOAD */
 
     function loadLocal() {
 
-        const saved =
-            localStorage.getItem('materials');
+    const saved =
+        localStorage.getItem('materials');
 
-        if (saved) {
+    if (!saved) return;
 
-            addedMaterials = JSON.parse(saved);
+    const parsed = JSON.parse(saved);
 
-            renderAddedItems();
-        }
+    const today =
+        new Date().toLocaleDateString('pt-BR');
+
+    if (parsed.date === today) {
+
+        addedMaterials = parsed.data;
+
+        renderAddedItems();
+
+    } else {
+
+        localStorage.removeItem('materials');
+
+        addedMaterials = [];
     }
+}
 
     /* COUNTER */
 
